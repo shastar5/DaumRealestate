@@ -87,7 +87,6 @@ def price_info(key):
                 price.append(x.string.strip())
         return price
     except Exception as e:
-        print(key.__str__() + '는 없음')
         return None
 
 
@@ -315,6 +314,7 @@ def crawl(indexnum):
                 while(iteration <= numofPrice):
                     for col in range(0, 13):
                         sheet[2].write(wanjurow, col, danji[col], format)
+
                     for col in range(13, 20):
                         sheet[2].write(wanjurow, col, near[col-13], format)
                     sheet[2].write(wanjurow, 20, price[iteration], format)
@@ -344,12 +344,14 @@ def crawl(indexnum):
 
         else:
             for col in range(0, 13):
-                sheet[0].write(wanjurow, col, danji[col], format)
+                sheet[2].write(wanjurow, col, danji[col], format)
             for col in range(13, 20):
-                sheet[0].write(wanjurow, col, near[col - 13], format)
+                sheet[2].write(wanjurow, col, near[col - 13], format)
                 wanjurow += 1
 
-for x in range(999, 1999):
+
+
+for x in range(999, 5000):
     print(x)
     crawl(x)
 
