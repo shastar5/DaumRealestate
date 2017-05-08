@@ -57,14 +57,14 @@ def near_info(key):
     return near_info
 
 isKB = False
-is114 = False
+only114 = False
 
 # 시세
 def price_info(key):
     global isKB
-    global is114
+    global only114
 
-    is114 = True
+    only114 = True
     isKB = False
     priceurl = 'http://realestate.daum.net/iframe/maemul/DanjiSise.daum?danjiId=' + key.__str__() + '&mcateCode=A1A3A4&saleTypeCode=S&tabName=sise&ptype='
     try:
@@ -78,8 +78,8 @@ def price_info(key):
         for hit in dataSource:
             if(hit.text.find('KB') != -1):
                 isKB = True
-            if(hit.text.find('국토') == -1 or len(hit.text) == 64):
-                is114 = False
+            if '국토' in hit.text:
+                only114 = False
         for row in table.findAll('tbody'):
             col = row.find_all('td')
             # 10개의 칼럼을 가지고 있음.
@@ -190,12 +190,11 @@ def crawl(indexnum):
     if(price != None):
         numofPrice = len(price)
     iteration = 0
-    print(isKB, is114)
-    print(numofPrice)
     # 서울
     if(loc == 1):
         if(price != None):
-            if(isKB == False and is114 == True):
+            # 정상적인 경우
+            if(isKB == False and only114 == False):
                 while(iteration <= numofPrice):
                     for col in range(0, 13):
                         sheet[0].write(seoulrow, col, danji[col], format)
@@ -207,8 +206,10 @@ def crawl(indexnum):
                     numofPrice = numofPrice - 11
                     seoulrow += 1
 
-            elif(isKB == False and is114 == False):
-                while(iteration <= numofPrice):
+            # 114정보만 있을때
+            # Number of cols == 5
+            elif(isKB == False and only114 == True):
+                while(True):
                     for col in range(0, 13):
                         sheet[0].write(seoulrow, col, danji[col], format)
                     for col in range(13, 20):
@@ -224,8 +225,10 @@ def crawl(indexnum):
                     sheet[0].write(seoulrow, 27, price[iteration], format)
                     iteration = iteration + 1
                     seoulrow += 1
-                    print(iteration)
+                    if(iteration >= numofPrice):
+                        break
 
+            # KB에서 제공할 경우
             else:
                 while (iteration <= numofPrice):
                     for col in range(0, 13):
@@ -246,9 +249,10 @@ def crawl(indexnum):
             seoulrow += 1
 
     # 전주
-    elif(loc == 2):
+    if(loc == 2):
         if(price != None):
-            if(isKB == False and is114 == True):
+            # 정상적인 경우
+            if(isKB == False and only114 == False):
                 while(iteration <= numofPrice):
                     for col in range(0, 13):
                         sheet[1].write(jeonjurow, col, danji[col], format)
@@ -260,12 +264,15 @@ def crawl(indexnum):
                     numofPrice = numofPrice - 11
                     jeonjurow += 1
 
-            elif(isKB == False and is114 == False):
-                while(iteration <= numofPrice):
+            # 114정보만 있을때
+            # Number of cols == 5
+            elif(isKB == False and only114 == True):
+                while(True):
                     for col in range(0, 13):
                         sheet[1].write(jeonjurow, col, danji[col], format)
                     for col in range(13, 20):
                         sheet[1].write(jeonjurow, col, near[col-13], format)
+
                     sheet[1].write(jeonjurow, 20, price[iteration], format)
                     iteration = iteration + 1
                     sheet[1].write(jeonjurow, 21, price[iteration], format)
@@ -276,9 +283,11 @@ def crawl(indexnum):
                     iteration = iteration + 1
                     sheet[1].write(jeonjurow, 27, price[iteration], format)
                     iteration = iteration + 1
-                    numofPrice = numofPrice - 5
                     jeonjurow += 1
+                    if(iteration >= numofPrice):
+                        break
 
+            # KB에서 제공할 경우
             else:
                 while (iteration <= numofPrice):
                     for col in range(0, 13):
@@ -301,7 +310,8 @@ def crawl(indexnum):
     # 완주
     elif(loc == 3):
         if(price != None):
-            if(isKB == False and is114 == True):
+            # 정상적인 경우
+            if(isKB == False and only114 == False):
                 while(iteration <= numofPrice):
                     for col in range(0, 13):
                         sheet[2].write(wanjurow, col, danji[col], format)
@@ -313,11 +323,12 @@ def crawl(indexnum):
                     numofPrice = numofPrice - 11
                     wanjurow += 1
 
-            elif(isKB == False and is114 == False):
-                while(iteration <= numofPrice):
+            # 114정보만 있을때
+            # Number of cols == 5
+            elif(isKB == False and only114 == True):
+                while(True):
                     for col in range(0, 13):
                         sheet[2].write(wanjurow, col, danji[col], format)
-
                     for col in range(13, 20):
                         sheet[2].write(wanjurow, col, near[col-13], format)
                     sheet[2].write(wanjurow, 20, price[iteration], format)
@@ -330,9 +341,11 @@ def crawl(indexnum):
                     iteration = iteration + 1
                     sheet[2].write(wanjurow, 27, price[iteration], format)
                     iteration = iteration + 1
-                    numofPrice = numofPrice - 5
                     wanjurow += 1
+                    if(iteration >= numofPrice):
+                        break;
 
+            # KB에서 제공할 경우
             else:
                 while (iteration <= numofPrice):
                     for col in range(0, 13):
@@ -352,6 +365,21 @@ def crawl(indexnum):
                 sheet[2].write(wanjurow, col, near[col - 13], format)
                 wanjurow += 1
 
-crawl(17045)
+def run(idx, idx2):
+    for x in range(idx, idx2):
+        print(x)
+        try:
+            crawl(x)
+        except Exception as e:
+            x = x+1
+            sleep(30)
+            run(x, idx2)
+
+        if x % 500 == 0:
+            sleep(20)
+
+run(1000, 9999)
+run(10000, 19999)
+run(1000000, 1999999)
 
 workbook.close()
