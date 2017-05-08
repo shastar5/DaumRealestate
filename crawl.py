@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import xlsxwriter
+from time import sleep
 
 # 아파트 이름, 위치
 def title(key):
@@ -63,7 +64,7 @@ def price_info(key):
     global isKB
     global is114
 
-    is114 = False
+    is114 = True
     isKB = False
     priceurl = 'http://realestate.daum.net/iframe/maemul/DanjiSise.daum?danjiId=' + key.__str__() + '&mcateCode=A1A3A4&saleTypeCode=S&tabName=sise&ptype='
     try:
@@ -77,8 +78,8 @@ def price_info(key):
         for hit in dataSource:
             if(hit.text.find('KB') != -1):
                 isKB = True
-            if(hit.text.find('국토해') == -1):
-                is114 = True
+            if(hit.text.find('국토') == -1 or len(hit.text) == 64):
+                is114 = False
         for row in table.findAll('tbody'):
             col = row.find_all('td')
             # 10개의 칼럼을 가지고 있음.
@@ -189,10 +190,12 @@ def crawl(indexnum):
     if(price != None):
         numofPrice = len(price)
     iteration = 0
+    print(isKB, is114)
+    print(numofPrice)
     # 서울
     if(loc == 1):
         if(price != None):
-            if(isKB == False and is114 == False):
+            if(isKB == False and is114 == True):
                 while(iteration <= numofPrice):
                     for col in range(0, 13):
                         sheet[0].write(seoulrow, col, danji[col], format)
@@ -204,7 +207,7 @@ def crawl(indexnum):
                     numofPrice = numofPrice - 11
                     seoulrow += 1
 
-            elif(isKB == False and is114 == True):
+            elif(isKB == False and is114 == False):
                 while(iteration <= numofPrice):
                     for col in range(0, 13):
                         sheet[0].write(seoulrow, col, danji[col], format)
@@ -220,8 +223,8 @@ def crawl(indexnum):
                     iteration = iteration + 1
                     sheet[0].write(seoulrow, 27, price[iteration], format)
                     iteration = iteration + 1
-                    numofPrice = numofPrice - 5
                     seoulrow += 1
+                    print(iteration)
 
             else:
                 while (iteration <= numofPrice):
@@ -245,7 +248,7 @@ def crawl(indexnum):
     # 전주
     elif(loc == 2):
         if(price != None):
-            if(isKB == False and is114 == False):
+            if(isKB == False and is114 == True):
                 while(iteration <= numofPrice):
                     for col in range(0, 13):
                         sheet[1].write(jeonjurow, col, danji[col], format)
@@ -257,7 +260,7 @@ def crawl(indexnum):
                     numofPrice = numofPrice - 11
                     jeonjurow += 1
 
-            elif(isKB == False and is114 == True):
+            elif(isKB == False and is114 == False):
                 while(iteration <= numofPrice):
                     for col in range(0, 13):
                         sheet[1].write(jeonjurow, col, danji[col], format)
@@ -298,7 +301,7 @@ def crawl(indexnum):
     # 완주
     elif(loc == 3):
         if(price != None):
-            if(isKB == False and is114 == False):
+            if(isKB == False and is114 == True):
                 while(iteration <= numofPrice):
                     for col in range(0, 13):
                         sheet[2].write(wanjurow, col, danji[col], format)
@@ -310,7 +313,7 @@ def crawl(indexnum):
                     numofPrice = numofPrice - 11
                     wanjurow += 1
 
-            elif(isKB == False and is114 == True):
+            elif(isKB == False and is114 == False):
                 while(iteration <= numofPrice):
                     for col in range(0, 13):
                         sheet[2].write(wanjurow, col, danji[col], format)
@@ -349,10 +352,6 @@ def crawl(indexnum):
                 sheet[2].write(wanjurow, col, near[col - 13], format)
                 wanjurow += 1
 
-
-
-for x in range(999, 5000):
-    print(x)
-    crawl(x)
+crawl(17045)
 
 workbook.close()
