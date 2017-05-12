@@ -235,10 +235,12 @@ def crawl(indexnum):
                         sheet[0].write(seoulrow, col, danji[col], format)
                     for col in range(13, 20):
                         sheet[0].write(seoulrow, col, near[col - 13], format)
+                    sheet[0].write(seoulrow, 20, price[iteration], format)
+                    iteration = iteration + 1
                     for col in range(31, 37):
                         sheet[0].write(seoulrow, col, price[iteration], format)
                         iteration = iteration + 1
-                    numofPrice = numofPrice - 11
+                    numofPrice = numofPrice - 7
                     seoulrow += 1
 
         else:
@@ -294,10 +296,12 @@ def crawl(indexnum):
                         sheet[1].write(jeonjurow, col, danji[col], format)
                     for col in range(13, 20):
                         sheet[1].write(jeonjurow, col, near[col - 13], format)
+                    sheet[1].write(jeonjurow, 20, price[iteration], format)
+                    iteration = iteration + 1
                     for col in range(31, 37):
                         sheet[1].write(jeonjurow, col, price[iteration], format)
                         iteration = iteration + 1
-                    numofPrice = numofPrice - 11
+                    numofPrice = numofPrice - 7
                     jeonjurow += 1
 
         else:
@@ -352,10 +356,12 @@ def crawl(indexnum):
                         sheet[2].write(wanjurow, col, danji[col], format)
                     for col in range(13, 20):
                         sheet[2].write(wanjurow, col, near[col - 13], format)
+                    sheet[2].write(wanjurow, 20, price[iteration], format)
+                    iteration = iteration + 1
                     for col in range(31, 37):
                         sheet[2].write(wanjurow, col, price[iteration], format)
                         iteration = iteration + 1
-                    numofPrice = numofPrice - 11
+                    numofPrice = numofPrice - 7
                     wanjurow += 1
 
         else:
@@ -371,15 +377,16 @@ def run(idx, idx2):
         try:
             crawl(x)
         except Exception as e:
-            x = x+1
-            sleep(30)
-            run(x, idx2)
+            print(str(x) + '에서 Exception 발생')
+            newindex = x+1
+            sleep(10)
+            run(newindex, idx2)
+            break
 
-        if x % 500 == 0:
-            sleep(20)
+        if x % 3000 == 0:
+            sleep(10)
 
-run(1000, 9999)
-run(10000, 19999)
+run(9926, 99999)
 run(1000000, 1999999)
 
 workbook.close()
