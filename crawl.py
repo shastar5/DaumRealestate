@@ -97,7 +97,7 @@ def price_info(key):
 
 
 # Open and create xlsx file
-workbook = xlsxwriter.Workbook('data2.xlsx')
+workbook = xlsxwriter.Workbook('realestate.xlsx')
 sheet = [workbook.add_worksheet('서울'), workbook.add_worksheet('전주'), workbook.add_worksheet('완주')]
 
 format = workbook.add_format()
@@ -168,6 +168,9 @@ for x in range(3):
     sheet[x].write('AJ3', '일반평균가', format)
     sheet[x].write('AK3', '상위평균가', format)
 
+    # Check index number
+    sheet[x].write('AL1', 'Index', format)
+
     # Set Column Size
     sheet[x].set_column('A:B', 20)
     sheet[x].set_column('C:M', 20)
@@ -197,6 +200,7 @@ def crawl(indexnum):
     iteration = 0
     # 서울
     if (loc == 1):
+        sheet[0].write(seoulrow, 37, indexnum, format)
         if (price != None):
             # 정상적인 경우
             if (isKB == False and only114 == False):
@@ -257,6 +261,7 @@ def crawl(indexnum):
 
     # 전주
     if (loc == 2):
+        sheet[1].write(jeonjurow, 37, indexnum, format)
         if (price != None):
             # 정상적인 경우
             if (isKB == False and only114 == False):
@@ -317,6 +322,7 @@ def crawl(indexnum):
 
     # 완주
     elif (loc == 3):
+        sheet[2].write(wanjurow, 37, indexnum, format)
         if (price != None):
             # 정상적인 경우
             if (isKB == False and only114 == False):
@@ -375,24 +381,27 @@ def crawl(indexnum):
                 sheet[2].write(wanjurow, col, near[col - 13], format)
             wanjurow += 1
 
+error = []
 
 def run(idx, idx2):
     for x in range(idx, idx2):
-        print(x)
         try:
+            if x % 100 == 0:
+                print(x)
             crawl(x)
         except Exception as e:
-            print(str(x) + '에서 Exception 발생')
-            newindex = x + 1
+            error.append(x)
             sleep(10)
-            run(newindex, idx2)
+            run(x, idx2)
             break
 
         if x % 3000 == 0:
+            print(x)
             sleep(10)
 
+run(1000, 10000)
 
-run(9926, 99999)
-run(1000000, 1999999)
+print(error)
+
 
 workbook.close()
