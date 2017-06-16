@@ -390,6 +390,7 @@ def run(idx, idx2):
                 print(x)
             crawl(x)
         except Exception as e:
+            print(x)
             error.append(x)
             sleep(10)
             run(x, idx2)
@@ -399,8 +400,8 @@ def run(idx, idx2):
             print(x)
             sleep(10)
 
-run(1000, 10000)
-
+run(10000, 99999)
+run(1000000, 1999999)
 print(error)
 
 
