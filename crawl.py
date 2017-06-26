@@ -38,7 +38,7 @@ def danji_info(key):
     titlename = infosoup.find_all('h3', {'class': 'fl_le fs_big'})
     for hit in titlename:
         danji_info.append(hit.text)
-    for hit in infosoup.find_all('span', attrs={'class': ['desc_info', 'tit_info']}):
+    for hit in infosoup.find_all('span', attrs={'class': ['desc_info', 'tit_info', 'ico_realestate_v1 address_number']}):
         # print(hit.contents[0].strip())
         danji_info.append(hit.contents[0].strip())
     return danji_info
@@ -115,61 +115,63 @@ merge_format = workbook.add_format({'bold': 1,
 for x in range(3):
     # 개요 정보
     sheet[x].write('A1', '아파트이름', format)
-    sheet[x].write('B1', '주소', format)
-    sheet[x].write('C1', '총세대수', format)
-    sheet[x].write('D1', '총동수', format)
-    sheet[x].write('E1', '준공년월', format)
-    sheet[x].write('F1', '입주년월', format)
-    sheet[x].write('G1', '건설사명', format)
-    sheet[x].write('H1', '최저/최고층', format)
-    sheet[x].write('I1', '총 주차대수', format)
-    sheet[x].write('J1', '난방방식', format)
-    sheet[x].write('K1', '난방연료', format)
-    sheet[x].write('L1', '용적율', format)
-    sheet[x].write('M1', '건폐율', format)
+    sheet[x].write('B1', '도로명 주소', format)
+    sheet[x].write('C1', '지번 주소', format)
+
+    sheet[x].write('D1', '총세대수', format)
+    sheet[x].write('E1', '총동수', format)
+    sheet[x].write('F1', '준공년월', format)
+    sheet[x].write('G1', '입주년월', format)
+    sheet[x].write('H1', '건설사명', format)
+    sheet[x].write('I1', '최저/최고층', format)
+    sheet[x].write('J1', '총 주차대수', format)
+    sheet[x].write('K1', '난방방식', format)
+    sheet[x].write('L1', '난방연료', format)
+    sheet[x].write('M1', '용적율', format)
+    sheet[x].write('N1', '건폐율', format)
 
     # 주변 시설
-    sheet[x].write('N1', '지하철', format)
-    sheet[x].write('O1', '버스', format)
-    sheet[x].write('P1', '도로시설', format)
-    sheet[x].write('Q1', '공원시설', format)
-    sheet[x].write('R1', '편의시설', format)
-    sheet[x].write('S1', '교육시설', format)
-    sheet[x].write('T1', '의료시설', format)
+    sheet[x].write('O1', '지하철', format)
+    sheet[x].write('P1', '버스', format)
+    sheet[x].write('Q1', '도로시설', format)
+    sheet[x].write('R1', '공원시설', format)
+    sheet[x].write('S1', '편의시설', format)
+    sheet[x].write('T1', '교육시설', format)
+    sheet[x].write('U1', '의료시설', format)
 
     # 아파트 시세
-    sheet[x].merge_range('U1:U3', '면적', merge_format)
+    sheet[x].merge_range('V1:V3', '면적', merge_format)
 
     # Merge cell
-    sheet[x].merge_range('V1:Z1', '매매', merge_format)
-    sheet[x].merge_range('AA1:AE1', '전세', merge_format)
-    sheet[x].merge_range('V2:W2', '부동산114', merge_format)
-    sheet[x].merge_range('X2:Z2', '실거래가', merge_format)
-    sheet[x].merge_range('AA2:AB2', '부동산114', merge_format)
-    sheet[x].merge_range('AC2:AE2', '실거래가', merge_format)
-    sheet[x].merge_range('AF1:AH2', '매매', merge_format)
-    sheet[x].merge_range('AI1:AK2', '전세', merge_format)
+    sheet[x].merge_range('W1:AA1', '매매', merge_format)
+    sheet[x].merge_range('AB1:AF1', '전세', merge_format)
+    sheet[x].merge_range('W2:X2', '부동산114', merge_format)
+    sheet[x].merge_range('Y2:AA2', '실거래가', merge_format)
+    sheet[x].merge_range('AB2:AC2', '부동산114', merge_format)
+    sheet[x].merge_range('AD2:AF2', '실거래가', merge_format)
+    sheet[x].merge_range('AG1:AI2', '매매', merge_format)
+    sheet[x].merge_range('AJ1:AL2', '전세', merge_format)
 
     # 부동산 정보
-    sheet[x].write('V3', '최고가', format)
-    sheet[x].write('W3', '최저가', format)
-    sheet[x].write('X3', '최고가', format)
-    sheet[x].write('Y3', '최저가', format)
-    sheet[x].write('Z3', '거래건수', format)
-    sheet[x].write('AA3', '최저가', format)
-    sheet[x].write('AB3', '최고가', format)
-    sheet[x].write('AC3', '최저가', format)
-    sheet[x].write('AD3', '최고가', format)
-    sheet[x].write('AE3', '거래건수', format)
-    sheet[x].write('AF3', '하위평균가', format)
-    sheet[x].write('AG3', '일반평균가', format)
-    sheet[x].write('AH3', '상위평균가', format)
-    sheet[x].write('AI3', '하위평균가', format)
-    sheet[x].write('AJ3', '일반평균가', format)
-    sheet[x].write('AK3', '상위평균가', format)
+    sheet[x].write('W3', '최고가', format)
+    sheet[x].write('X3', '최저가', format)
+    sheet[x].write('Y3', '최고가', format)
+    sheet[x].write('Z3', '최저가', format)
+    sheet[x].write('AA3', '거래건수', format)
+    sheet[x].write('AB3', '최저가', format)
+    sheet[x].write('AC3', '최고가', format)
+    sheet[x].write('AD3', '최저가', format)
+    sheet[x].write('AE3', '최고가', format)
+    sheet[x].write('AF3', '거래건수', format)
+    sheet[x].write('AG3', '하위평균가', format)
+    sheet[x].write('AH3', '일반평균가', format)
+    sheet[x].write('AI3', '상위평균가', format)
+    sheet[x].write('AJ3', '하위평균가', format)
+    sheet[x].write('AK3', '일반평균가', format)
+    sheet[x].write('AL3', '상위평균가', format)
 
     # Check index number
-    sheet[x].write('AL1', 'Index', format)
+    sheet[x].write('AM1', 'Index', format)
 
     # Set Column Size
     sheet[x].set_column('A:B', 20)
@@ -200,16 +202,16 @@ def crawl(indexnum):
     iteration = 0
     # 서울
     if (loc == 1):
-        sheet[0].write(seoulrow, 37, indexnum, format)
+        sheet[0].write(seoulrow, 38, indexnum, format)
         if (price != None):
             # 정상적인 경우
             if (isKB == False and only114 == False):
                 while (iteration <= numofPrice):
-                    for col in range(0, 13):
+                    for col in range(0, 14):
                         sheet[0].write(seoulrow, col, danji[col], format)
-                    for col in range(13, 20):
-                        sheet[0].write(seoulrow, col, near[col - 13], format)
-                    for col in range(20, 31):
+                    for col in range(14, 21):
+                        sheet[0].write(seoulrow, col, near[col - 14], format)
+                    for col in range(21, 32):
                         sheet[0].write(seoulrow, col, price[iteration], format)
                         iteration = iteration + 1
                     numofPrice = numofPrice - 11
@@ -219,19 +221,19 @@ def crawl(indexnum):
             # Number of cols == 5
             elif (isKB == False and only114 == True):
                 while (True):
-                    for col in range(0, 13):
+                    for col in range(0, 14):
                         sheet[0].write(seoulrow, col, danji[col], format)
-                    for col in range(13, 20):
-                        sheet[0].write(seoulrow, col, near[col - 13], format)
-                    sheet[0].write(seoulrow, 20, price[iteration], format)
-                    iteration = iteration + 1
+                    for col in range(14, 21):
+                        sheet[0].write(seoulrow, col, near[col - 14], format)
                     sheet[0].write(seoulrow, 21, price[iteration], format)
                     iteration = iteration + 1
                     sheet[0].write(seoulrow, 22, price[iteration], format)
                     iteration = iteration + 1
-                    sheet[0].write(seoulrow, 26, price[iteration], format)
+                    sheet[0].write(seoulrow, 23, price[iteration], format)
                     iteration = iteration + 1
                     sheet[0].write(seoulrow, 27, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[0].write(seoulrow, 28, price[iteration], format)
                     iteration = iteration + 1
                     seoulrow += 1
                     if (iteration >= numofPrice):
@@ -240,37 +242,37 @@ def crawl(indexnum):
             # KB에서 제공할 경우
             else:
                 while (iteration <= numofPrice):
-                    for col in range(0, 13):
+                    for col in range(0, 14):
                         sheet[0].write(seoulrow, col, danji[col], format)
-                    for col in range(13, 20):
-                        sheet[0].write(seoulrow, col, near[col - 13], format)
-                    sheet[0].write(seoulrow, 20, price[iteration], format)
+                    for col in range(14, 21):
+                        sheet[0].write(seoulrow, col, near[col - 14], format)
+                    sheet[0].write(seoulrow, 21, price[iteration], format)
                     iteration = iteration + 1
-                    for col in range(31, 37):
+                    for col in range(32, 38):
                         sheet[0].write(seoulrow, col, price[iteration], format)
                         iteration = iteration + 1
                     numofPrice = numofPrice - 7
                     seoulrow += 1
 
         else:
-            for col in range(0, 13):
+            for col in range(0, 14):
                 sheet[0].write(seoulrow, col, danji[col], format)
-            for col in range(13, 20):
-                sheet[0].write(seoulrow, col, near[col - 13], format)
+            for col in range(14, 21):
+                sheet[0].write(seoulrow, col, near[col - 14], format)
             seoulrow += 1
 
     # 전주
     if (loc == 2):
-        sheet[1].write(jeonjurow, 37, indexnum, format)
+        sheet[1].write(jeonjurow, 38, indexnum, format)
         if (price != None):
             # 정상적인 경우
             if (isKB == False and only114 == False):
                 while (iteration <= numofPrice):
-                    for col in range(0, 13):
+                    for col in range(0, 14):
                         sheet[1].write(jeonjurow, col, danji[col], format)
-                    for col in range(13, 20):
-                        sheet[1].write(jeonjurow, col, near[col - 13], format)
-                    for col in range(20, 31):
+                    for col in range(14, 21):
+                        sheet[1].write(jeonjurow, col, near[col - 14], format)
+                    for col in range(21, 32):
                         sheet[1].write(jeonjurow, col, price[iteration], format)
                         iteration = iteration + 1
                     numofPrice = numofPrice - 11
@@ -280,19 +282,19 @@ def crawl(indexnum):
             # Number of cols == 5
             elif (isKB == False and only114 == True):
                 while (True):
-                    for col in range(0, 13):
+                    for col in range(0, 14):
                         sheet[1].write(jeonjurow, col, danji[col], format)
-                    for col in range(13, 20):
-                        sheet[1].write(jeonjurow, col, near[col - 13], format)
-                    sheet[1].write(jeonjurow, 20, price[iteration], format)
-                    iteration = iteration + 1
+                    for col in range(14, 21):
+                        sheet[1].write(jeonjurow, col, near[col - 14], format)
                     sheet[1].write(jeonjurow, 21, price[iteration], format)
                     iteration = iteration + 1
                     sheet[1].write(jeonjurow, 22, price[iteration], format)
                     iteration = iteration + 1
-                    sheet[1].write(jeonjurow, 26, price[iteration], format)
+                    sheet[1].write(jeonjurow, 23, price[iteration], format)
                     iteration = iteration + 1
                     sheet[1].write(jeonjurow, 27, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[1].write(jeonjurow, 28, price[iteration], format)
                     iteration = iteration + 1
                     jeonjurow += 1
                     if (iteration >= numofPrice):
@@ -301,37 +303,37 @@ def crawl(indexnum):
             # KB에서 제공할 경우
             else:
                 while (iteration <= numofPrice):
-                    for col in range(0, 13):
+                    for col in range(0, 14):
                         sheet[1].write(jeonjurow, col, danji[col], format)
-                    for col in range(13, 20):
-                        sheet[1].write(jeonjurow, col, near[col - 13], format)
-                    sheet[1].write(jeonjurow, 20, price[iteration], format)
+                    for col in range(14, 21):
+                        sheet[1].write(jeonjurow, col, near[col - 14], format)
+                    sheet[1].write(jeonjurow, 21, price[iteration], format)
                     iteration = iteration + 1
-                    for col in range(31, 37):
+                    for col in range(32, 38):
                         sheet[1].write(jeonjurow, col, price[iteration], format)
                         iteration = iteration + 1
                     numofPrice = numofPrice - 7
                     jeonjurow += 1
 
         else:
-            for col in range(0, 13):
+            for col in range(0, 14):
                 sheet[1].write(jeonjurow, col, danji[col], format)
-            for col in range(13, 20):
-                sheet[1].write(jeonjurow, col, near[col - 13], format)
+            for col in range(14, 21):
+                sheet[1].write(jeonjurow, col, near[col - 14], format)
             jeonjurow += 1
 
     # 완주
     elif (loc == 3):
-        sheet[2].write(wanjurow, 37, indexnum, format)
+        sheet[2].write(wanjurow, 38, indexnum, format)
         if (price != None):
             # 정상적인 경우
             if (isKB == False and only114 == False):
                 while (iteration <= numofPrice):
-                    for col in range(0, 13):
+                    for col in range(0, 14):
                         sheet[2].write(wanjurow, col, danji[col], format)
-                    for col in range(13, 20):
-                        sheet[2].write(wanjurow, col, near[col - 13], format)
-                    for col in range(20, 31):
+                    for col in range(14, 21):
+                        sheet[2].write(wanjurow, col, near[col - 14], format)
+                    for col in range(21, 32):
                         sheet[2].write(wanjurow, col, price[iteration], format)
                         iteration = iteration + 1
                     numofPrice = numofPrice - 11
@@ -341,19 +343,19 @@ def crawl(indexnum):
             # Number of cols == 5
             elif (isKB == False and only114 == True):
                 while (True):
-                    for col in range(0, 13):
+                    for col in range(0, 14):
                         sheet[2].write(wanjurow, col, danji[col], format)
-                    for col in range(13, 20):
-                        sheet[2].write(wanjurow, col, near[col - 13], format)
-                    sheet[2].write(wanjurow, 20, price[iteration], format)
-                    iteration = iteration + 1
+                    for col in range(14, 21):
+                        sheet[2].write(wanjurow, col, near[col - 14], format)
                     sheet[2].write(wanjurow, 21, price[iteration], format)
                     iteration = iteration + 1
                     sheet[2].write(wanjurow, 22, price[iteration], format)
                     iteration = iteration + 1
-                    sheet[2].write(wanjurow, 26, price[iteration], format)
+                    sheet[2].write(wanjurow, 23, price[iteration], format)
                     iteration = iteration + 1
                     sheet[2].write(wanjurow, 27, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[2].write(wanjurow, 28, price[iteration], format)
                     iteration = iteration + 1
                     wanjurow += 1
                     if (iteration >= numofPrice):
@@ -362,23 +364,23 @@ def crawl(indexnum):
             # KB에서 제공할 경우
             else:
                 while (iteration <= numofPrice):
-                    for col in range(0, 13):
+                    for col in range(0, 14):
                         sheet[2].write(wanjurow, col, danji[col], format)
-                    for col in range(13, 20):
-                        sheet[2].write(wanjurow, col, near[col - 13], format)
-                    sheet[2].write(wanjurow, 20, price[iteration], format)
+                    for col in range(14, 21):
+                        sheet[2].write(wanjurow, col, near[col - 14], format)
+                    sheet[2].write(wanjurow, 21, price[iteration], format)
                     iteration = iteration + 1
-                    for col in range(31, 37):
+                    for col in range(32, 38):
                         sheet[2].write(wanjurow, col, price[iteration], format)
                         iteration = iteration + 1
                     numofPrice = numofPrice - 7
                     wanjurow += 1
 
         else:
-            for col in range(0, 13):
+            for col in range(0, 14):
                 sheet[2].write(wanjurow, col, danji[col], format)
-            for col in range(13, 20):
-                sheet[2].write(wanjurow, col, near[col - 13], format)
+            for col in range(14, 21):
+                sheet[2].write(wanjurow, col, near[col - 14], format)
             wanjurow += 1
 
 error = []
@@ -390,6 +392,7 @@ def run(idx, idx2):
                 print(x)
             crawl(x)
         except Exception as e:
+            print(e)
             print(x)
             error.append(x)
             sleep(10)
@@ -400,8 +403,9 @@ def run(idx, idx2):
             print(x)
             sleep(10)
 
-run(10000, 99999)
-run(1000000, 1999999)
+run(10, 50)
+
+
 print(error)
 
 
