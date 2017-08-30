@@ -3,6 +3,7 @@ from urllib.request import urlopen
 import xlsxwriter
 from time import sleep
 
+fname = '0-500000.xlsx'
 
 # 아파트 이름, 위치
 def title(key):
@@ -99,7 +100,7 @@ def price_info(key):
 
 
 # Open and create xlsx file
-workbook = xlsxwriter.Workbook('realestate.xlsx')
+workbook = xlsxwriter.Workbook(fname)
 sheet = [workbook.add_worksheet('경기')]
 
 format = workbook.add_format()
