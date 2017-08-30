@@ -3,7 +3,6 @@ from urllib.request import urlopen
 import xlsxwriter
 from time import sleep
 
-fname = 'dt.xlsx'
 
 # 아파트 이름, 위치
 def title(key):
@@ -14,10 +13,10 @@ def title(key):
         if (titlesoup.title == None):
             return 0
         loc = titlesoup.title.contents[0]
-        """
-        if (loc[0:2] == '서울'):
+        if (loc[0:2] == '경기'):
             # print(loc[0:2])
             return 1
+        """
         if (loc[3:5] == '전주'):
             # print('전주')
             return 2
@@ -25,10 +24,6 @@ def title(key):
             # print('완주')
             return 3
         """
-        print(key, loc[0:2])
-        if (loc[0:2] == '경기'):
-            return 4
-
     except Exception as e:
         return None
 
@@ -104,8 +99,8 @@ def price_info(key):
 
 
 # Open and create xlsx file
-workbook = xlsxwriter.Workbook(fname)
-sheet = [workbook.add_worksheet('서울'), workbook.add_worksheet('전주'), workbook.add_worksheet('완주'), workbook.add_worksheet('경기')]
+workbook = xlsxwriter.Workbook('realestate.xlsx')
+sheet = [workbook.add_worksheet('경기')]
 
 format = workbook.add_format()
 format.set_align('center')
@@ -119,7 +114,7 @@ merge_format = workbook.add_format({'bold': 1,
                                     'valign': 'center'})
 
 # Write some data headers.
-for x in range(4):
+for x in range(1):
     # 개요 정보
     sheet[x].write('A1', '아파트이름', format)
     sheet[x].write('B1', '도로명 주소', format)
@@ -185,81 +180,20 @@ for x in range(4):
     sheet[x].set_column('C:M', 20)
     sheet[x].set_column('N:T', 50)
 
-row = 3
-rows = []
+seoulrow = 3
+jeonjurow = 3
+wanjurow = 3
 
 format.set_bold(False)
 
-def write(loc, iteration, numofPrice, price, danji, near, indexnum):
-    global row
-    loc = loc - 1
-    sheet[loc].write(row, 38, indexnum, format)
-    if (price != None):
-        # 정상적인 경우
-        if (isKB == False and only114 == False):
-            while (iteration <= numofPrice):
-                for col in range(0, 14):
-                    sheet[loc].write(row, col, danji[col], format)
-                for col in range(14, 21):
-                    sheet[loc].write(row, col, near[col - 14], format)
-                for col in range(21, 32):
-                    sheet[loc].write(row, col, price[iteration], format)
-                    iteration = iteration + 1
-                numofPrice = numofPrice - 11
-                row += 1
-
-        # 114정보만 있을때
-        # Number of cols == 5
-        elif (isKB == False and only114 == True):
-            while (True):
-                for col in range(0, 14):
-                    sheet[loc].write(row, col, danji[col], format)
-                for col in range(14, 21):
-                    sheet[loc].write(row, col, near[col - 14], format)
-                sheet[loc].write(row, 21, price[iteration], format)
-                iteration = iteration + 1
-                sheet[loc].write(row, 22, price[iteration], format)
-                iteration = iteration + 1
-                sheet[loc].write(row, 23, price[iteration], format)
-                iteration = iteration + 1
-                sheet[loc].write(row, 27, price[iteration], format)
-                iteration = iteration + 1
-                sheet[loc].write(row, 28, price[iteration], format)
-                iteration = iteration + 1
-                row += 1
-                if (iteration >= numofPrice):
-                    break
-
-        # KB에서 제공할 경우
-        else:
-            while (iteration <= numofPrice):
-                for col in range(0, 14):
-                    sheet[loc].write(row, col, danji[col], format)
-                for col in range(14, 21):
-                    sheet[loc].write(row, col, near[col - 14], format)
-                sheet[loc].write(row, 21, price[iteration], format)
-                iteration = iteration + 1
-                for col in range(32, 38):
-                    sheet[loc].write(row, col, price[iteration], format)
-                    iteration = iteration + 1
-                numofPrice = numofPrice - 7
-                row += 1
-
-    else:
-        for col in range(0, 14):
-            sheet[loc].write(row, col, danji[col], format)
-        for col in range(14, 21):
-            sheet[loc].write(row, col, near[col - 14], format)
-        row += 1
 
 def crawl(indexnum):
     global seoulrow
     global jeonjurow
     global wanjurow
-    global ggrow
 
     loc = title(indexnum)
-    if loc != 4:
+    if (loc == None):
         return
     danji = danji_info(indexnum)
     near = near_info(indexnum)
@@ -267,9 +201,190 @@ def crawl(indexnum):
 
     if (price != None):
         numofPrice = len(price)
-
     iteration = 0
-    write(loc=loc, iteration=iteration, price=price, danji=danji, near=near, indexnum=indexnum, numofPrice=numofPrice)
+    # 서울/경기
+    if (loc == 1):
+        sheet[0].write(seoulrow, 38, indexnum, format)
+        if (price != None):
+            # 정상적인 경우
+            if (isKB == False and only114 == False):
+                while (iteration <= numofPrice):
+                    for col in range(0, 14):
+                        sheet[0].write(seoulrow, col, danji[col], format)
+                    for col in range(14, 21):
+                        sheet[0].write(seoulrow, col, near[col - 14], format)
+                    for col in range(21, 32):
+                        sheet[0].write(seoulrow, col, price[iteration], format)
+                        iteration = iteration + 1
+                    numofPrice = numofPrice - 11
+                    seoulrow += 1
+
+            # 114정보만 있을때
+            # Number of cols == 5
+            elif (isKB == False and only114 == True):
+                while (True):
+                    for col in range(0, 14):
+                        sheet[0].write(seoulrow, col, danji[col], format)
+                    for col in range(14, 21):
+                        sheet[0].write(seoulrow, col, near[col - 14], format)
+                    sheet[0].write(seoulrow, 21, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[0].write(seoulrow, 22, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[0].write(seoulrow, 23, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[0].write(seoulrow, 27, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[0].write(seoulrow, 28, price[iteration], format)
+                    iteration = iteration + 1
+                    seoulrow += 1
+                    if (iteration >= numofPrice):
+                        break
+
+            # KB에서 제공할 경우
+            else:
+                while (iteration <= numofPrice):
+                    for col in range(0, 14):
+                        sheet[0].write(seoulrow, col, danji[col], format)
+                    for col in range(14, 21):
+                        sheet[0].write(seoulrow, col, near[col - 14], format)
+                    sheet[0].write(seoulrow, 21, price[iteration], format)
+                    iteration = iteration + 1
+                    for col in range(32, 38):
+                        sheet[0].write(seoulrow, col, price[iteration], format)
+                        iteration = iteration + 1
+                    numofPrice = numofPrice - 7
+                    seoulrow += 1
+
+        else:
+            for col in range(0, 14):
+                sheet[0].write(seoulrow, col, danji[col], format)
+            for col in range(14, 21):
+                sheet[0].write(seoulrow, col, near[col - 14], format)
+            seoulrow += 1
+
+    # 전주
+    if (loc == 2):
+        sheet[1].write(jeonjurow, 38, indexnum, format)
+        if (price != None):
+            # 정상적인 경우
+            if (isKB == False and only114 == False):
+                while (iteration <= numofPrice):
+                    for col in range(0, 14):
+                        sheet[1].write(jeonjurow, col, danji[col], format)
+                    for col in range(14, 21):
+                        sheet[1].write(jeonjurow, col, near[col - 14], format)
+                    for col in range(21, 32):
+                        sheet[1].write(jeonjurow, col, price[iteration], format)
+                        iteration = iteration + 1
+                    numofPrice = numofPrice - 11
+                    jeonjurow += 1
+
+            # 114정보만 있을때
+            # Number of cols == 5
+            elif (isKB == False and only114 == True):
+                while (True):
+                    for col in range(0, 14):
+                        sheet[1].write(jeonjurow, col, danji[col], format)
+                    for col in range(14, 21):
+                        sheet[1].write(jeonjurow, col, near[col - 14], format)
+                    sheet[1].write(jeonjurow, 21, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[1].write(jeonjurow, 22, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[1].write(jeonjurow, 23, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[1].write(jeonjurow, 27, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[1].write(jeonjurow, 28, price[iteration], format)
+                    iteration = iteration + 1
+                    jeonjurow += 1
+                    if (iteration >= numofPrice):
+                        break
+
+            # KB에서 제공할 경우
+            else:
+                while (iteration <= numofPrice):
+                    for col in range(0, 14):
+                        sheet[1].write(jeonjurow, col, danji[col], format)
+                    for col in range(14, 21):
+                        sheet[1].write(jeonjurow, col, near[col - 14], format)
+                    sheet[1].write(jeonjurow, 21, price[iteration], format)
+                    iteration = iteration + 1
+                    for col in range(32, 38):
+                        sheet[1].write(jeonjurow, col, price[iteration], format)
+                        iteration = iteration + 1
+                    numofPrice = numofPrice - 7
+                    jeonjurow += 1
+
+        else:
+            for col in range(0, 14):
+                sheet[1].write(jeonjurow, col, danji[col], format)
+            for col in range(14, 21):
+                sheet[1].write(jeonjurow, col, near[col - 14], format)
+            jeonjurow += 1
+
+    # 완주
+    elif (loc == 3):
+        sheet[2].write(wanjurow, 38, indexnum, format)
+        if (price != None):
+            # 정상적인 경우
+            if (isKB == False and only114 == False):
+                while (iteration <= numofPrice):
+                    for col in range(0, 14):
+                        sheet[2].write(wanjurow, col, danji[col], format)
+                    for col in range(14, 21):
+                        sheet[2].write(wanjurow, col, near[col - 14], format)
+                    for col in range(21, 32):
+                        sheet[2].write(wanjurow, col, price[iteration], format)
+                        iteration = iteration + 1
+                    numofPrice = numofPrice - 11
+                    wanjurow += 1
+
+            # 114정보만 있을때
+            # Number of cols == 5
+            elif (isKB == False and only114 == True):
+                while (True):
+                    for col in range(0, 14):
+                        sheet[2].write(wanjurow, col, danji[col], format)
+                    for col in range(14, 21):
+                        sheet[2].write(wanjurow, col, near[col - 14], format)
+                    sheet[2].write(wanjurow, 21, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[2].write(wanjurow, 22, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[2].write(wanjurow, 23, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[2].write(wanjurow, 27, price[iteration], format)
+                    iteration = iteration + 1
+                    sheet[2].write(wanjurow, 28, price[iteration], format)
+                    iteration = iteration + 1
+                    wanjurow += 1
+                    if (iteration >= numofPrice):
+                        break
+
+            # KB에서 제공할 경우
+            else:
+                while (iteration <= numofPrice):
+                    for col in range(0, 14):
+                        sheet[2].write(wanjurow, col, danji[col], format)
+                    for col in range(14, 21):
+                        sheet[2].write(wanjurow, col, near[col - 14], format)
+                    sheet[2].write(wanjurow, 21, price[iteration], format)
+                    iteration = iteration + 1
+                    for col in range(32, 38):
+                        sheet[2].write(wanjurow, col, price[iteration], format)
+                        iteration = iteration + 1
+                    numofPrice = numofPrice - 7
+                    wanjurow += 1
+
+        else:
+            for col in range(0, 14):
+                sheet[2].write(wanjurow, col, danji[col], format)
+            for col in range(14, 21):
+                sheet[2].write(wanjurow, col, near[col - 14], format)
+            wanjurow += 1
+
 error = []
 
 def run(idx, idx2):
@@ -279,6 +394,7 @@ def run(idx, idx2):
                 print(x)
             crawl(x)
         except Exception as e:
+            print(e)
             print(x)
             error.append(x)
             sleep(10)
@@ -289,6 +405,10 @@ def run(idx, idx2):
             print(x)
             sleep(10)
 
-run(1000, 1020)
+run(0, 100)
+
+
 print(error)
+
+
 workbook.close()
